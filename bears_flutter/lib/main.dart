@@ -1,6 +1,10 @@
 import 'package:bears_flutter/flows/feed/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import 'flows/chat/chat.dart';
+import 'models/user/user.dart';
 
 void main() {
   //debugPaintSizeEnabled=true;
@@ -16,7 +20,10 @@ class App extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         cursorColor: Colors.deepPurple,
       ),
-      home: FeedView()
+      home: ScopedModel<UserModel>(
+        model: UserModel(),
+        child: ChatView(friendUsername: 'someone', friendProfilePic: 'https://static-cdn.jtvnw.net/jtv_user_pictures/neace-profile_image-d77145881ab325c6-70x70.jpeg',)
+      )
     );
   }
 }

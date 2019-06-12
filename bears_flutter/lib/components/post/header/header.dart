@@ -273,14 +273,18 @@ List<Widget> stringToListOfText(String text, TextStyle style) {
 class ProfileIcon extends StatelessWidget {
 
   final String image;
+  final bool margin;
 
-  ProfileIcon({@required this.image});
+  ProfileIcon({
+    @required this.image,
+    this.margin = true
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topCenter,
-      margin: EdgeInsets.only(top: 12, left: 12, right: 10, bottom: 15),
+      margin: margin ? EdgeInsets.only(top: 12, left: 12, right: 10, bottom: 15) : null,
       width: 42,
       height: 42,
       decoration: BoxDecoration(
