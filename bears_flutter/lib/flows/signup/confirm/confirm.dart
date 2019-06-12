@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bears_flutter/components/app_bars/app_bars.dart';
 import 'package:bears_flutter/components/spacing/bottom_spacer.dart';
 import 'package:bears_flutter/components/spacing/top_spacer.dart';
 import 'package:bears_flutter/components/text/information_text.dart';
@@ -9,6 +10,7 @@ import 'package:bears_flutter/flows/signup/confirm/helper.dart';
 import 'package:bears_flutter/flows/signup/models/email.dart';
 import 'package:bears_flutter/flows/signup/models/error.dart';
 import 'package:bears_flutter/flows/signup/models/username.dart';
+import 'package:bears_flutter/models/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -254,11 +256,11 @@ void _confirm({String email, String token, String username, String dateOfBirth, 
       "code": SignupConfirmHelper.controller.text
     })
   );
-// email in use, username in use, token invalid (expired)
+
   switch (response.statusCode) {
     case 200:
       Map body = JsonDecoder().convert(response.body);
-      _goToProfile(context: context, userId: body["userId"], loginToken: body["token"]);
+      _goToProfile(context: context, userId: body["userId"], loginToken: body["token"], username: username);
       break;
     case 410:
         SignupErrorModel errorModel = ScopedModel.of<SignupErrorModel>(context, rebuildOnChange: false);
@@ -285,6 +287,35 @@ void _confirm({String email, String token, String username, String dateOfBirth, 
   print(response.statusCode.toString() + response.body);
 }
 
-void _goToProfile({ BuildContext context, String userId, String loginToken }) {
-  // save userId to encrypted storage, as well as the loginToken. Move to user account page. Setup up bio, etc. All is optional.
+void _goToProfile({ BuildContext context, String userId, String loginToken, String username }) async {
+  await ScopedModel.of<UserModel>(context, rebuildOnChange: false).loginUser(
+    userId,
+    loginToken,
+    username
+  );
+
+  Navigator.of(context).pushReplacement(MaterialPageRoute(
+    builder: (BuildContext context) {
+      ProfileSettingsView();
+    }
+  ));
+}
+
+class ProfileSettingsView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: standardAppBar('Edit Profile'),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+
+          ],
+        ),
+      ),
+    );
+  }
 }

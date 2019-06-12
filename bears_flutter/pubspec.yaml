@@ -36,10 +36,12 @@ dependencies:
   
   flutter_secure_storage: ^3.2.1+1
 
-  time_formatter: ^1.0.0+5
+  time_formatter: ^1.0.0+4
 
   material_design_icons_flutter: ^3.2.3695
 
+  shared_preferences: 0.5.3+1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
